@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -26,6 +27,16 @@ func crm() {
 	contacts := make(UserList)
 	contacts["1"] = User{"Le premier", "lepremier@hihi.cl"}
 	contacts["2"] = User{"Le deuxième", "ledeuxieme@haha.cl"}
+
+	flagName := flag.String("name", "", "help message for flag name")
+	flagMail := flag.String("email", "", "help message for flag email")
+	flag.Parse()
+
+	fmt.Println(*flagName, *flagMail)
+
+	if "" != *flagName && "" != *flagMail {
+		contacts[strconv.Itoa(len(contacts)+1)] = User{*flagName, *flagMail}
+	}
 
 	for {
 		printChoices()
