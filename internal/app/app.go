@@ -3,22 +3,22 @@ package app
 import (
 	"bufio"
 	"fmt"
-	"github.com/FerreiraLuciano/tp-go/internal/storage"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/FerreiraLuciano/tp-go/internal/storage"
 )
 
+func NewContact(name string, email string) *storage.Contact {
+	if "" == name || "" == email {
+		return nil
+	}
+
+	return &storage.Contact{Name: name, Email: email}
+}
+
 //type UserList map[int]*Contact
-//
-//func (u *Contact) newContact(id int, name string, email string) *Contact {
-//
-//	if "" == name || "" == email {
-//		return nil
-//	}
-//
-//	return &Contact{id, name, email}
-//}
 //
 //func (u *Contact) createContact(contacts map[int]*Contact) {
 //	contacts[len(contacts)+1] = u.newContact(u.ID, u.Name, u.Email)
@@ -118,10 +118,7 @@ func handleAddContact(reader *bufio.Reader, store storage.Storer) {
 	fmt.Print("Email: ")
 	email, _ := reader.ReadString('\n')
 
-	contact := &storage.Contact{
-		Name:  strings.TrimSpace(name),
-		Email: strings.TrimSpace(email),
-	}
+	contact := NewContact(strings.TrimSpace(name), strings.TrimSpace(email))
 
 	if err := store.Add(contact); err != nil {
 		fmt.Printf("Erreur lors de l'ajout: %v\n", err)
@@ -135,7 +132,11 @@ func handleUpdateContact(reader *bufio.Reader, store storage.Storer) {
 	fmt.Print("ID du contact à modifier: ")
 	id, _ := reader.ReadString('\n')
 	id = strings.TrimSpace(id)
-	target, _ := strconv.Atoi(id)
+	target, err := strconv.Atoi(id)
+	if err != nil {
+		fmt.Printf("Invalid ID : %v\n", err)
+		return
+	}
 
 	fmt.Print("New name: ")
 	name, _ := reader.ReadString('\n')
@@ -172,7 +173,11 @@ func handleDeleteContact(reader *bufio.Reader, store storage.Storer) {
 	fmt.Print("ID du contact à supprimer: ")
 	id, _ := reader.ReadString('\n')
 	id = strings.TrimSpace(id)
-	target, _ := strconv.Atoi(id)
+	target, err := strconv.Atoi(id)
+	if err != nil {
+		fmt.Printf("Erreur: %v\n", err)
+		return
+	}
 
 	if err := store.Delete(target); err != nil {
 		fmt.Printf("Error: %v\n", err)
@@ -183,7 +188,7 @@ func handleDeleteContact(reader *bufio.Reader, store storage.Storer) {
 }
 
 func printChoices() {
-	fmt.Println("Choose an option : ")
+	fmt.Println("\nChoose an option : ")
 	fmt.Println("	1 - Add contact")
 	fmt.Println("	2 - List contacts")
 	fmt.Println("	3 - Update contact")
