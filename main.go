@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -11,22 +12,52 @@ import (
 )
 
 type User struct {
+	ID    int
 	Name  string
 	Email string
 }
 
-type UserList map[string]User
+type UserList map[int]*User
 
 func main() {
-
 	crm()
+}
+
+func (u *User) newContact(id int, name string, email string) *User {
+
+	if "" == name || "" == email {
+		return nil
+	}
+
+	return &User{id, name, email}
+}
+
+func (u *User) createContact(contacts map[int]*User) {
+	contacts[len(contacts)+1] = u.newContact(u.ID, u.Name, u.Email)
+}
+
+func (contacts *UserList) removeContact(id int) (string, error) {
+
+	_, ok := (*contacts)[id]
+	if ok {
+		delete(*contacts, id)
+		return fmt.Sprintf("Le contact d'id %d a bien été supprimé", id), nil
+	} else {
+		return "", errors.New("le contact n'existe pas")
+	}
+
 }
 
 func crm() {
 
 	contacts := make(UserList)
-	contacts["1"] = User{"Le premier", "lepremier@hihi.cl"}
-	contacts["2"] = User{"Le deuxième", "ledeuxieme@haha.cl"}
+	var user1 = new(User)
+	user1 = user1.newContact(len(contacts)+1, "Le premier", "lepremier@hihi.cl")
+	user1.createContact(contacts)
+
+	var user2 = new(User)
+	user2 = user2.newContact(len(contacts)+1, "Le deuxième", "ledeuxieme@hihi.cl")
+	user2.createContact(contacts)
 
 	flagName := flag.String("name", "", "help message for flag name")
 	flagMail := flag.String("email", "", "help message for flag email")
@@ -35,7 +66,9 @@ func crm() {
 	fmt.Println(*flagName, *flagMail)
 
 	if "" != *flagName && "" != *flagMail {
-		contacts[strconv.Itoa(len(contacts)+1)] = User{*flagName, *flagMail}
+		flagUser := new(User)
+		flagUser = flagUser.newContact(len(contacts)+1, *flagName, *flagMail)
+		flagUser.createContact(contacts)
 	}
 
 	for {
@@ -49,7 +82,7 @@ func crm() {
 			addContact(contacts)
 
 		case "2", "l", "L":
-			listContacts(contacts)
+			listContacts(&contacts)
 
 		case "3", "u", "U":
 			updateContact(contacts)
@@ -75,7 +108,7 @@ func printChoices() {
 	fmt.Println("	5 - Quit")
 }
 
-func addContact(contacts UserList) {
+func addContact(contacts map[int]*User) {
 
 	fmt.Println("")
 	fmt.Print("Type the new user's email : ")
@@ -86,19 +119,22 @@ func addContact(contacts UserList) {
 
 	name := getUserInput()
 
-	id := strconv.Itoa(len(contacts) + 1)
+	id := len(contacts) + 1
 
-	contacts[id] = User{name, email}
+	var user = new(User)
+	user = user.newContact(id, name, email)
+
+	user.createContact(contacts)
 
 	fmt.Println("\nContact added successfully with ID", id, "!")
 }
 
-func listContacts(contacts UserList) {
+func listContacts(contacts *UserList) {
 
 	fmt.Println("")
 	fmt.Println("Contacts : ")
-	for key, value := range contacts {
-		fmt.Println("	- ID -", key, ": {", "name :", value.Name, ", email :", value.Email, "}")
+	for _, value := range *contacts {
+		fmt.Println("	- ID -", value.ID, ": {", "name :", value.Name, ", email :", value.Email, "}")
 	}
 }
 
@@ -107,7 +143,7 @@ func updateContact(contacts UserList) {
 	fmt.Println("")
 	fmt.Println("Choose a contact to edit by its' id : ")
 
-	id := getUserInput()
+	id, _ := strconv.Atoi(getUserInput())
 
 	value, ok := contacts[id]
 	if !ok {
@@ -133,7 +169,7 @@ func updateContact(contacts UserList) {
 		email = value.Email
 	}
 
-	contacts[id] = User{name, email}
+	contacts[id] = &User{value.ID, name, email}
 
 	fmt.Println("\nContact updated successfully !")
 }
@@ -143,14 +179,12 @@ func deleteContact(contacts UserList) {
 	fmt.Println("")
 	fmt.Println("Choose a contact by its' id : ", contacts)
 
-	id := getUserInput()
+	id, _ := strconv.Atoi(getUserInput())
 
-	_, ok := contacts[id]
-	if !ok {
-		fmt.Println("Contact not found")
+	_, err := contacts.removeContact(id)
+	if err != nil {
+		return
 	}
-
-	delete(contacts, id)
 
 	fmt.Println("\nContact deleted successfully !")
 }
