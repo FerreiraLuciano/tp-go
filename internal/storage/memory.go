@@ -22,12 +22,12 @@ func (ms *MemoryStore) Add(contact *Contact) error {
 	return nil
 }
 
-func (ms *MemoryStore) GetAll() []*Contact {
+func (ms *MemoryStore) GetAll() ([]*Contact, error) {
 	contacts := make([]*Contact, 0, len(ms.contacts))
 	for _, contact := range ms.contacts {
 		contacts = append(contacts, contact)
 	}
-	return contacts
+	return contacts, nil
 }
 
 func (ms *MemoryStore) GetById(ID int) (*Contact, error) {
