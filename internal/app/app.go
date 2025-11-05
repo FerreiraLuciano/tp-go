@@ -18,24 +18,6 @@ func NewContact(name string, email string) *storage.Contact {
 	return &storage.Contact{Name: name, Email: email}
 }
 
-//type UserList map[int]*Contact
-//
-//func (u *Contact) createContact(contacts map[int]*Contact) {
-//	contacts[len(contacts)+1] = u.newContact(u.ID, u.Name, u.Email)
-//}
-//
-//func (contacts *UserList) removeContact(id int) (string, error) {
-//
-//	_, ok := (*contacts)[id]
-//	if ok {
-//		delete(*contacts, id)
-//		return fmt.Sprintf("Le contact d'id %d a bien été supprimé", id), nil
-//	} else {
-//		return "", errors.New("le contact n'existe pas")
-//	}
-//
-//}
-
 func Crm(store storage.Storer) {
 
 	reader := bufio.NewReader(os.Stdin)
@@ -63,52 +45,6 @@ func Crm(store storage.Storer) {
 		}
 	}
 
-	//contacts := make(map[int]*Contact)
-	//var user1 = new(Contact)
-	//user1 = user1.newContact(len(contacts)+1, "Le premier", "lepremier@hihi.cl")
-	//user1.createContact(contacts)
-	//
-	//var user2 = new(Contact)
-	//user2 = user2.newContact(len(contacts)+1, "Le deuxième", "ledeuxieme@hihi.cl")
-	//user2.createContact(contacts)
-	//
-	//flagName := flag.String("name", "", "help message for flag name")
-	//flagMail := flag.String("email", "", "help message for flag email")
-	//flag.Parse()
-	//
-	//fmt.Println(*flagName, *flagMail)
-	//
-	//if "" != *flagName && "" != *flagMail {
-	//	flagUser := new(Contact)
-	//	flagUser = flagUser.newContact(len(contacts)+1, *flagName, *flagMail)
-	//	flagUser.createContact(contacts)
-	//}
-	//
-	//for {
-	//	printChoices()
-	//
-	//	choice := getUserInput()
-	//
-	//	switch choice {
-	//
-	//	case "1", "a", "A":
-	//		addContact(contacts)
-	//
-	//	case "2", "l", "L":
-	//		listContacts(&contacts)
-	//
-	//	case "3", "u", "U":
-	//		updateContact(contacts)
-	//
-	//	case "4", "d", "D":
-	//		deleteContact(contacts)
-	//
-	//	case "5", "q", "Q":
-	//		fmt.Println("Bye !")
-	//		return
-	//
-	//	}
-	//}
 }
 
 func handleAddContact(reader *bufio.Reader, store storage.Storer) {
