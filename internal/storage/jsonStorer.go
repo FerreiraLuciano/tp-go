@@ -23,7 +23,7 @@ func (j *JsonStore) Add(contact *Contact) error {
 
 	targets, err := j.GetAll()
 
-	id := findNextID(targets)
+	id := FindNextID(targets)
 
 	newContact := helper.InputTarget{
 		ID:    id,
@@ -58,7 +58,7 @@ func (j *JsonStore) GetAll() ([]*Contact, error) {
 
 	contacts := make([]*Contact, 0, len(existingTargets))
 	for _, target := range existingTargets {
-		contacts = append(contacts, convertToContact(target))
+		contacts = append(contacts, ConvertToContact(target))
 	}
 
 	return contacts, nil
@@ -73,7 +73,7 @@ func (j *JsonStore) GetById(ID int) (*Contact, error) {
 
 	contacts := make([]*Contact, 0, len(existingTargets))
 	for _, target := range existingTargets {
-		contacts = append(contacts, convertToContact(target))
+		contacts = append(contacts, ConvertToContact(target))
 	}
 
 	for _, contact := range contacts {
@@ -146,7 +146,7 @@ func (j *JsonStore) Delete(ID int) error {
 	return nil
 }
 
-func convertToContact(target helper.InputTarget) *Contact {
+func ConvertToContact(target helper.InputTarget) *Contact {
 	return &Contact{
 		ID:    target.ID,
 		Name:  target.Name,
@@ -162,7 +162,7 @@ func convertToTarget(contact *Contact) helper.InputTarget {
 	}
 }
 
-func findNextID(targets []*Contact) int {
+func FindNextID(targets []*Contact) int {
 	var id int
 
 	for i, e := range targets {
