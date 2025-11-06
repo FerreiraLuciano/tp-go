@@ -10,7 +10,8 @@ var cliCmd = &cobra.Command{
 	Use:   "cli",
 	Short: "This is a cli for a crm about Denver",
 	Run: func(cmd *cobra.Command, args []string) {
-		store := storage.NewMemoryStore()
+		//store := storage.NewMemoryStore()
+		store := storage.NewJsonStore("contacts.json")
 		app.Crm(store)
 	},
 }
