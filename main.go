@@ -1,13 +1,7 @@
 package main
 
-import (
-	"github.com/FerreiraLuciano/tp-go/internal/app"
-	"github.com/FerreiraLuciano/tp-go/internal/storage"
-)
+import "github.com/FerreiraLuciano/tp-go/cmd"
 
 func main() {
-
-	store := storage.NewMemoryStore()
-
-	app.Crm(store)
+	cmd.Execute()
 }
