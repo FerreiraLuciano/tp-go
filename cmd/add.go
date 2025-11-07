@@ -63,7 +63,7 @@ var addCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(addCmd)
 
-	addCmd.Flags().StringVarP(&addFilePath, "file", "f", "", "Paht to file to add contact to")
+	addCmd.Flags().StringVarP(&addFilePath, "file", "f", "", "Path of the file to add contact to")
 	addCmd.Flags().StringVarP(&addName, "name", "n", "", "Contact's name")
 	addCmd.Flags().StringVarP(&addEmail, "email", "u", "", "Contact's email")
 
