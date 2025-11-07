@@ -46,6 +46,7 @@ var updateCmd = &cobra.Command{
 
 		if contactFound == nil {
 			fmt.Printf("Desired contact does not exist.")
+			return
 		}
 
 		if err != nil {

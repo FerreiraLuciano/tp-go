@@ -17,7 +17,7 @@ var (
 var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "Gets an existing contact from the json file.",
-	Long:  `The command 'get' gets an existing contact (ID, name, email) from the json file. If the contact is not in the file, it returns an error.`,
+	Long:  `The command 'get' gets an existing contact (ID, name, email) from the json file. If the contact is not in the file, it does nothing.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if getFilePath == "" || getIdContact == "" {
 			fmt.Println("Error: all the flags (--filePath, --id) are mandatory.")
@@ -47,6 +47,7 @@ var getCmd = &cobra.Command{
 
 		if contactFound == nil {
 			fmt.Printf("Desired contact does not exist.")
+			return
 		} else {
 			fmt.Printf("ID: %d, Name: %s, Email: %s\n", contactFound.ID, contactFound.Name, contactFound.Email)
 		}
