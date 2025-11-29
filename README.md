@@ -29,7 +29,7 @@
 ### 1. Launch the CLI
 
 ```bash
-  go run main.go
+  go run main.go cli
 ```
 
 ### 2. Add a contact using flags
