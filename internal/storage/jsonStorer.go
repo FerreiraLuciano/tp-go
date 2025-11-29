@@ -36,7 +36,7 @@ func (j *JsonStore) Add(contact *Contact) error {
 	var result []helper.InputTarget
 
 	for _, target := range targets {
-		result = append(result, convertToTarget(target))
+		result = append(result, ConvertToTarget(target))
 	}
 
 	result = append(result, newContact)
@@ -108,7 +108,7 @@ func (j *JsonStore) Update(ID int, name string, email string) error {
 
 	targets := make([]helper.InputTarget, 0, len(contacts))
 	for _, contact := range contacts {
-		targets = append(targets, convertToTarget(contact))
+		targets = append(targets, ConvertToTarget(contact))
 	}
 
 	err = helper.SaveTargetsToFile(j.filePath, targets)
@@ -134,7 +134,7 @@ func (j *JsonStore) Delete(ID int) error {
 	targets := make([]helper.InputTarget, 0)
 	for _, contact := range contacts {
 		if contact.ID != ID {
-			targets = append(targets, convertToTarget(contact))
+			targets = append(targets, ConvertToTarget(contact))
 		}
 	}
 
@@ -154,7 +154,7 @@ func ConvertToContact(target helper.InputTarget) *Contact {
 	}
 }
 
-func convertToTarget(contact *Contact) helper.InputTarget {
+func ConvertToTarget(contact *Contact) helper.InputTarget {
 	return helper.InputTarget{
 		ID:    contact.ID,
 		Name:  contact.Name,

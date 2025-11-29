@@ -2,10 +2,14 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
+	"github.com/FerreiraLuciano/tp-go/internal/storage"
 	"github.com/spf13/cobra"
 )
+
+var store storage.Storer
 
 var rootCmd = &cobra.Command{
 	Use:   "crm",
@@ -20,5 +24,9 @@ func Execute() {
 }
 
 func init() {
-
+	var err error
+	store, err = storage.NewGORMStore("contacts.db")
+	if err != nil {
+		log.Fatal("Error while establishing connection to the database:", err)
+	}
 }

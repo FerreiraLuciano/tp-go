@@ -1,9 +1,12 @@
 package storage
 
+import "gorm.io/gorm"
+
 type Contact struct {
-	ID    int
-	Name  string
-	Email string
+	gorm.Model
+	ID    int    `gorm:"primaryKey"`
+	Name  string `gorm:"type:varchar(20);not null"`
+	Email string `gorm:"type:varchar(50);uniqueIndex;not null"`
 }
 
 type Storer interface {
