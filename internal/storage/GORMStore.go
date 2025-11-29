@@ -12,7 +12,7 @@ type GORMStore struct {
 }
 
 func NewGORMStore(dbPath string) (*GORMStore, error) {
-	db, err := gorm.Open(sqlite.Open("sqlite.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}

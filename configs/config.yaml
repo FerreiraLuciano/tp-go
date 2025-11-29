@@ -1,0 +1,3 @@
+storage:
+  type: "database" # Possible values: "memory", "database", "json"
+  path: "sqlite.db" # Possible values: "xxxx.json" for json storage and "xxxx.db" for database
